@@ -12,13 +12,16 @@ import com.unicauca.tesis.api.models.DTO.response.Response;
 import com.unicauca.tesis.api.models.DTO.response.Resultado;
 
 @Service
-public class PonderacionService implements IPonderacionService {
+public class PonderacionServiceImpl implements IPonderacionService {
 
 	private IPonderacionBDService iCalcularPonderacionBDService;
+	private IPonderacionETLService iPonderacionETLService;
 
 	@Autowired
-	public PonderacionService(IPonderacionBDService iCalcularPonderacionBDService) {
+	public PonderacionServiceImpl(IPonderacionBDService iCalcularPonderacionBDService,
+			IPonderacionETLService iPonderacionETLService) {
 		this.iCalcularPonderacionBDService = iCalcularPonderacionBDService;
+		this.iPonderacionETLService = iPonderacionETLService;
 	}
 
 	@Override
@@ -27,10 +30,10 @@ public class PonderacionService implements IPonderacionService {
 		Response<List<List<Resultado>>> resultado = new Response<>();
 		List<List<Resultado>> ponderaciones = new ArrayList<>();
 
-		// faltan los otros 3 servicios
 		ponderaciones.add(this.iCalcularPonderacionBDService.obtenerPonderacionBD(requestSimilitud.getBaseDatos()));
+		ponderaciones.add(this.iPonderacionETLService.obtenerPonderacionETL(requestSimilitud.getEtl()));
 
-		resultado.setEstatus(HttpStatus.ACCEPTED);
+		resultado.setEstatus(HttpStatus.OK);
 		resultado.setData(ponderaciones);
 
 		return resultado;

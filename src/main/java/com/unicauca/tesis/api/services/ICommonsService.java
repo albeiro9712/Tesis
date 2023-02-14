@@ -1,6 +1,6 @@
 package com.unicauca.tesis.api.services;
 
-public interface IUtilService {
+public interface ICommonsService {
 
 	public Double calcularPonderadoParaNumeros(Double numeroAlmacenado, Double numeroEntrada);
 
@@ -12,8 +12,9 @@ public interface IUtilService {
 
 	public Double calcularDocumentacionFinalConPorcentaje(Double documentacion, Double porcentaje);
 
-	public Double calcularCractTectFinalConPorcentaje(Double espacionEnDisco, Double EspacioEnMemoria,
-			Double multiplataforma, Double porcentaje);
+	public Double calcularCractTectFinalConPorcentaje(double porcentaje, double... args);
 
-	public Double calcularPonderadoFinal(Double costo, Double documentacion, Double caractTec, Double funcionalidades);
+	public Double calcularPonderadoFinal(double... args);
+	
+	public Double calcularFuncionalidadesFinalConPorcentaje(double porcentaje, double... args);
 }

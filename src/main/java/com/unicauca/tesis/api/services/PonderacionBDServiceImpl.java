@@ -1,6 +1,7 @@
 package com.unicauca.tesis.api.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,13 @@ import com.unicauca.tesis.api.repositories.CaracteristicasBDRepository;
 public class PonderacionBDServiceImpl implements IPonderacionBDService {
 
 	private CaracteristicasBDRepository caracteristicasBDRepository;
-	private IUtilService iUtilService;
+	private ICommonsService iCommonsService;
 
 	@Autowired
 	public PonderacionBDServiceImpl(CaracteristicasBDRepository caracteristicasBDRepository,
-			IUtilService iUtilService) {
+			ICommonsService iCommonsService) {
 		this.caracteristicasBDRepository = caracteristicasBDRepository;
-		this.iUtilService = iUtilService;
+		this.iCommonsService = iCommonsService;
 	}
 
 	@Override
@@ -43,62 +44,57 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 		Resultado resultado = new Resultado();
 
 		// costo
-		double costoPonderado = this.iUtilService.calcularPonderadoParaNumeros(baseDatosAlmacenada.getCosto(),
+		double costoPonderado = this.iCommonsService.calcularPonderadoParaNumeros(baseDatosAlmacenada.getCosto(),
 				baseDatosEntrada.getCosto().getValor());
 
 		// documentacion
-		double documentacionPonderado = this.iUtilService.calcularPonderadoParaTextos(
+		double documentacionPonderado = this.iCommonsService.calcularPonderadoParaTextos(
 				baseDatosAlmacenada.getDocumentacion(), baseDatosEntrada.getDocumentacion().getValor());
 
 		// caracteristicas tecnicas
-		double espacionEnDisco = this.iUtilService.calcularPonderadoParaNumeros(
+		double espacionEnDisco = this.iCommonsService.calcularPonderadoParaNumeros(
 				Double.valueOf(baseDatosAlmacenada.getEspacionEnDisco()),
 				Double.valueOf(baseDatosEntrada.getCaracteristicasTecnicas().getEspacionEnDisco()));
 
-		double EspacioEnMemoria = this.iUtilService.calcularPonderadoParaNumeros(
+		double EspacioEnMemoria = this.iCommonsService.calcularPonderadoParaNumeros(
 				Double.valueOf(baseDatosAlmacenada.getEspacioEnMemoria()),
 				Double.valueOf(baseDatosEntrada.getCaracteristicasTecnicas().getEspacioEnMemoria()));
 
-		double multiplataforma = this.iUtilService.calcularPonderadoParaTextos(baseDatosAlmacenada.getMultiplataforma(),
+		double multiplataforma = this.iCommonsService.calcularPonderadoParaTextos(
+				baseDatosAlmacenada.getMultiplataforma(),
 				baseDatosEntrada.getCaracteristicasTecnicas().getMultiplataforma());
 
 		// funcionalidades
-		double apiPonderado = this.iUtilService.calcularPonderadoParaTextos(baseDatosAlmacenada.getMetodosReplicacion(),
-				baseDatosEntrada.getFuncionalidadesBD().getMetodosReplicacion());
-
-		double metodosReplicacion = this.iUtilService.calcularPonderadoParaTextos(
-				baseDatosAlmacenada.getFuncionesCifrado(),
-				baseDatosEntrada.getFuncionalidadesBD().getFuncionesCifrado());
-
-		double funcionesCifrado = this.iUtilService.calcularPonderadoParaTextos(
+		double apiPonderado = this.iCommonsService.calcularPonderadoParaTextos(
 				baseDatosAlmacenada.getMetodosReplicacion(),
 				baseDatosEntrada.getFuncionalidadesBD().getMetodosReplicacion());
 
-		double costoResultado = this.iUtilService.calcularCostoFinalConPorcentaje(costoPonderado,
-				baseDatosEntrada.getCosto().getPorcentaje());
-		double docuResultado = this.iUtilService.calcularDocumentacionFinalConPorcentaje(documentacionPonderado,
-				baseDatosEntrada.getDocumentacion().getPorcentaje());
-		double caracTecResultado = this.iUtilService.calcularCractTectFinalConPorcentaje(espacionEnDisco,
-				EspacioEnMemoria, multiplataforma, baseDatosEntrada.getCaracteristicasTecnicas().getPorcentaje());
-		double funcionalidadesResultado = calcularFuncionalidadesFinalConPorcentaje(apiPonderado, metodosReplicacion,
-				funcionesCifrado, baseDatosEntrada.getFuncionalidadesBD().getPorcentaje());
+		double metodosReplicacion = this.iCommonsService.calcularPonderadoParaTextos(
+				baseDatosAlmacenada.getFuncionesCifrado(),
+				baseDatosEntrada.getFuncionalidadesBD().getFuncionesCifrado());
 
-		double resulFinal = this.iUtilService.calcularPonderadoFinal(costoResultado, docuResultado, caracTecResultado,
-				funcionalidadesResultado);
+		double funcionesCifrado = this.iCommonsService.calcularPonderadoParaTextos(
+				baseDatosAlmacenada.getMetodosReplicacion(),
+				baseDatosEntrada.getFuncionalidadesBD().getMetodosReplicacion());
+
+		double costoResultado = this.iCommonsService.calcularCostoFinalConPorcentaje(costoPonderado,
+				baseDatosEntrada.getCosto().getPorcentaje());
+		double docuResultado = this.iCommonsService.calcularDocumentacionFinalConPorcentaje(documentacionPonderado,
+				baseDatosEntrada.getDocumentacion().getPorcentaje());
+		double caracTecResultado = this.iCommonsService.calcularCractTectFinalConPorcentaje(espacionEnDisco,
+				EspacioEnMemoria, multiplataforma, baseDatosEntrada.getCaracteristicasTecnicas().getPorcentaje());
+		double funcionalidadesResultado = this.iCommonsService.calcularFuncionalidadesFinalConPorcentaje(
+				baseDatosEntrada.getFuncionalidadesBD().getPorcentaje(), apiPonderado, metodosReplicacion,
+				funcionesCifrado);
+
+		double resulFinal = this.iCommonsService.calcularPonderadoFinal(costoResultado, docuResultado,
+				caracTecResultado, funcionalidadesResultado);
 
 		resultado.setHerramienta(baseDatosAlmacenada.getHerramienta().getNombre() + " "
 				+ baseDatosAlmacenada.getHerramienta().getEdicion());
 		resultado.setPonderado(resulFinal);
 
 		return resultado;
-
-	}
-
-	private Double calcularFuncionalidadesFinalConPorcentaje(Double apiPonderado, Double metodosReplicacion,
-			Double funcionesCifrado, Double porcentaje) {
-
-		double resultado = (apiPonderado + metodosReplicacion + funcionesCifrado) / 3;
-		return resultado * porcentaje;
 
 	}
 

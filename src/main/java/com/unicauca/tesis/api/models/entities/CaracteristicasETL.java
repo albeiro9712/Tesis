@@ -45,7 +45,7 @@ public class CaracteristicasETL extends CaracteristicasGenerales {
 	private String filtro;
 
 	@Column(name = "remocion_duplicada")
-	private String remocionDuplicaad;
+	private String remocionDuplicidad;
 
 	@Column(name = "normalizacion_filas")
 	private String normalizacionFilas;
@@ -144,12 +144,12 @@ public class CaracteristicasETL extends CaracteristicasGenerales {
 		this.filtro = filtro;
 	}
 
-	public String getRemocionDuplicaad() {
-		return remocionDuplicaad;
+	public String getRemocionDuplicidad() {
+		return remocionDuplicidad;
 	}
 
-	public void setRemocionDuplicaad(String remocionDuplicaad) {
-		this.remocionDuplicaad = remocionDuplicaad;
+	public void setRemocionDuplicidad(String remocionDuplicidad) {
+		this.remocionDuplicidad = remocionDuplicidad;
 	}
 
 	public String getNormalizacionFilas() {

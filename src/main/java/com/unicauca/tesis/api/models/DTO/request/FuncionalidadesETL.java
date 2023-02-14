@@ -22,7 +22,7 @@ public class FuncionalidadesETL {
 
 	private String filtro;
 
-	private String remocionDuplicaad;
+	private String remocionDuplicidad;
 
 	private String normalizacionFilas;
 
@@ -74,8 +74,8 @@ public class FuncionalidadesETL {
 		return filtro;
 	}
 
-	public String getRemocionDuplicaad() {
-		return remocionDuplicaad;
+	public String getRemocionDuplicidad() {
+		return remocionDuplicidad;
 	}
 
 	public String getNormalizacionFilas() {

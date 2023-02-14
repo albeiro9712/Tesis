@@ -1,13 +1,15 @@
 package com.unicauca.tesis.api.services;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 
 @Service
-public class UtilServiceImpl implements IUtilService {
+public class CommonsServiceImpl implements ICommonsService {
 
 	private IMedidaSimilitudService iMedidaSimilitudService;
 
-	public UtilServiceImpl(IMedidaSimilitudService iMedidaSimilitudService) {
+	public CommonsServiceImpl(IMedidaSimilitudService iMedidaSimilitudService) {
 		this.iMedidaSimilitudService = iMedidaSimilitudService;
 	}
 
@@ -46,15 +48,18 @@ public class UtilServiceImpl implements IUtilService {
 	}
 
 	@Override
-	public Double calcularCractTectFinalConPorcentaje(Double espacionEnDisco, Double espacioEnMemoria,
-			Double multiplataforma, Double porcentaje) {
-		double resultado = (espacionEnDisco + espacioEnMemoria + multiplataforma) / 3;
-		return resultado * porcentaje;
+	public Double calcularCractTectFinalConPorcentaje(double porcentaje, double... args) {
+		return ((Arrays.stream(args).sum()) / args.length) * porcentaje;
 	}
 
 	@Override
-	public Double calcularPonderadoFinal(Double costo, Double documentacion, Double caractTec, Double funcionalidades) {
-		return costo + documentacion + caractTec + funcionalidades;
+	public Double calcularPonderadoFinal(double... args) {
+		return Arrays.stream(args).sum();
+	}
+
+	@Override
+	public Double calcularFuncionalidadesFinalConPorcentaje(double porcentaje, double... args) {
+		return ((Arrays.stream(args).sum()) / args.length) * porcentaje;
 	}
 
 }
