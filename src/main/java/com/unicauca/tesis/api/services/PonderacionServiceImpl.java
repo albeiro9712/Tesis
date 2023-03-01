@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.unicauca.tesis.api.models.DTO.request.RequestSimilitud;
 import com.unicauca.tesis.api.models.DTO.response.Response;
-import com.unicauca.tesis.api.models.DTO.response.Resultado;
+import com.unicauca.tesis.api.models.DTO.response.RespuestaDatosAlmacenados;
+import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderado;
 
 @Service
 public class PonderacionServiceImpl implements IPonderacionService {
@@ -25,18 +26,30 @@ public class PonderacionServiceImpl implements IPonderacionService {
 	}
 
 	@Override
-	public Response<List<List<Resultado>>> obtenerPonderados(RequestSimilitud requestSimilitud) {
+	public Response<List<List<ResultadoPonderado>>> obtenerPonderados(RequestSimilitud requestSimilitud) {
 
-		Response<List<List<Resultado>>> resultado = new Response<>();
-		List<List<Resultado>> ponderaciones = new ArrayList<>();
+		Response<List<List<ResultadoPonderado>>> resultadoPonderado = new Response<>();
+		List<List<ResultadoPonderado>> ponderaciones = new ArrayList<>();
 
 		ponderaciones.add(this.iCalcularPonderacionBDService.obtenerPonderacionBD(requestSimilitud.getBaseDatos()));
 		ponderaciones.add(this.iPonderacionETLService.obtenerPonderacionETL(requestSimilitud.getEtl()));
 
-		resultado.setEstatus(HttpStatus.OK);
-		resultado.setData(ponderaciones);
+		resultadoPonderado.setEstatus(HttpStatus.OK);
+		resultadoPonderado.setData(ponderaciones);
 
-		return resultado;
+		return resultadoPonderado;
+	}
+
+	@Override
+	public Response<RespuestaDatosAlmacenados> obtenerDatosAlmacenados() {
+		
+		Response<RespuestaDatosAlmacenados> response = new Response<>();
+		
+		RespuestaDatosAlmacenados respuestaDatosAlmacenados = new RespuestaDatosAlmacenados();
+		respuestaDatosAlmacenados.setBaseDatos(iCalcularPonderacionBDService.obtenerValoresAmacenados());
+		response.setEstatus(HttpStatus.OK);
+		response.setData(respuestaDatosAlmacenados);
+		return response;
 	}
 
 }

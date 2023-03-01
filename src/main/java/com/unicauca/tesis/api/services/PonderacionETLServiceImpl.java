@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.unicauca.tesis.api.models.DTO.request.ETL;
-import com.unicauca.tesis.api.models.DTO.response.Resultado;
+import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderado;
 import com.unicauca.tesis.api.models.entities.CaracteristicasETL;
 import com.unicauca.tesis.api.repositories.CaracteristicasETLRepository;
 
@@ -25,9 +25,9 @@ public class PonderacionETLServiceImpl implements IPonderacionETLService {
 	}
 
 	@Override
-	public List<Resultado> obtenerPonderacionETL(ETL etl) {
+	public List<ResultadoPonderado> obtenerPonderacionETL(ETL etl) {
 		List<CaracteristicasETL> herramientasETL = this.caracteristicasETLRepository.findAll();
-		List<Resultado> resultadosETL = new ArrayList<>();
+		List<ResultadoPonderado> resultadosETL = new ArrayList<>();
 
 		for (int i = 0; i < herramientasETL.size(); i++) {
 			resultadosETL.add(calcularPonderadoPorHerramienta(etl, herramientasETL.get(i)));
@@ -36,8 +36,8 @@ public class PonderacionETLServiceImpl implements IPonderacionETLService {
 		return resultadosETL;
 	}
 
-	private Resultado calcularPonderadoPorHerramienta(ETL etlRequest, CaracteristicasETL etlAlmacenada) {
-		Resultado resultado = new Resultado();
+	private ResultadoPonderado calcularPonderadoPorHerramienta(ETL etlRequest, CaracteristicasETL etlAlmacenada) {
+		ResultadoPonderado resultadoPonderado = new ResultadoPonderado();
 
 		// costo
 		double costo = this.iCommonsService.calcularPonderadoParaNumeros(etlAlmacenada.getCosto(),
@@ -122,11 +122,11 @@ public class PonderacionETLServiceImpl implements IPonderacionETLService {
 		double resulFinal = this.iCommonsService.calcularPonderadoFinal(costoResultado, docuResultado,
 				caracTecResultado, funcionalidadesResultado);
 
-		resultado.setHerramienta(
+		resultadoPonderado.setHerramienta(
 				etlAlmacenada.getHerramienta().getNombre() + " " + etlAlmacenada.getHerramienta().getEdicion());
-		resultado.setPonderado(resulFinal);
+		resultadoPonderado.setPonderado(resulFinal);
 
-		return resultado;
+		return resultadoPonderado;
 	}
 
 }

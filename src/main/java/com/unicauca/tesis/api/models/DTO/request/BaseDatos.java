@@ -2,6 +2,7 @@ package com.unicauca.tesis.api.models.DTO.request;
 
 public class BaseDatos {
 
+	private String nombre;
 	private Costo costo;
 	private Documentacion documentacion;
 	private CaracteristicasTecnicas caracteristicasTecnicas;
@@ -37,6 +38,14 @@ public class BaseDatos {
 
 	public void setFuncionalidadesBD(FuncionalidadesBD funcionalidadesBD) {
 		this.funcionalidadesBD = funcionalidadesBD;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
 }

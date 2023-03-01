@@ -1,6 +1,6 @@
 package com.unicauca.tesis.api.models.DTO.response;
 
-public class Resultado {
+public class ResultadoPonderado {
 
 	private String herramienta;
 	private Double ponderado;

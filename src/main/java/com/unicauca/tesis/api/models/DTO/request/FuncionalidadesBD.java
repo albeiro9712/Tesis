@@ -36,4 +36,22 @@ public class FuncionalidadesBD {
 		this.porcentaje = porcentaje;
 	}
 
+	public void setApisMetodosAcceso(String apisMetodosAcceso) {
+		this.apisMetodosAcceso = apisMetodosAcceso;
+	}
+
+	public void setMetodosReplicacion(String metodosReplicacion) {
+		this.metodosReplicacion = metodosReplicacion;
+	}
+
+	public void setFuncionesCifrado(String funcionesCifrado) {
+		this.funcionesCifrado = funcionesCifrado;
+	}
+
+	public void setCapacidaMaximaAlmace(Double capacidaMaximaAlmace) {
+		this.capacidaMaximaAlmace = capacidaMaximaAlmace;
+	}
+	
+	
+
 }
