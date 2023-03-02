@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.unicauca.tesis.api.models.DTO.request.BaseDatos;
 import com.unicauca.tesis.api.models.DTO.request.RequestSimilitud;
 import com.unicauca.tesis.api.models.DTO.response.Response;
 import com.unicauca.tesis.api.models.DTO.response.RespuestaDatosAlmacenados;
-import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderado;
 import com.unicauca.tesis.api.services.IPonderacionService;
 
 @RestController
@@ -30,11 +30,11 @@ public class SimilitudController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Response<List<List<ResultadoPonderado>>>> guardarCliente(
+	public ResponseEntity<Response<List<List<BaseDatos>>>> guardarCliente(
 			@RequestBody RequestSimilitud requestSimilitud) {
-		Response<List<List<ResultadoPonderado>>> response = this.iPonderacionService
+		Response<List<List<BaseDatos>>> response = this.iPonderacionService
 				.obtenerPonderados(requestSimilitud);
-		return new ResponseEntity<Response<List<List<ResultadoPonderado>>>>(response, response.getEstatus());
+		return new ResponseEntity<Response<List<List<BaseDatos>>>>(response, response.getEstatus());
 	}
 
 	@GetMapping()

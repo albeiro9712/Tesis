@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.unicauca.tesis.api.models.DTO.request.BaseDatos;
 import com.unicauca.tesis.api.models.DTO.request.RequestSimilitud;
 import com.unicauca.tesis.api.models.DTO.response.Response;
 import com.unicauca.tesis.api.models.DTO.response.RespuestaDatosAlmacenados;
-import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderado;
+import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderadoBD;
 
 @Service
 public class PonderacionServiceImpl implements IPonderacionService {
@@ -26,18 +27,18 @@ public class PonderacionServiceImpl implements IPonderacionService {
 	}
 
 	@Override
-	public Response<List<List<ResultadoPonderado>>> obtenerPonderados(RequestSimilitud requestSimilitud) {
+	public Response<List<List<BaseDatos>>> obtenerPonderados(RequestSimilitud requestSimilitud) {
 
-		Response<List<List<ResultadoPonderado>>> resultadoPonderado = new Response<>();
-		List<List<ResultadoPonderado>> ponderaciones = new ArrayList<>();
+		Response<List<List<BaseDatos>>> resultadoPonderadoBD = new Response<>();
+		List<List<BaseDatos>> ponderaciones = new ArrayList<>();
 
 		ponderaciones.add(this.iCalcularPonderacionBDService.obtenerPonderacionBD(requestSimilitud.getBaseDatos()));
-		ponderaciones.add(this.iPonderacionETLService.obtenerPonderacionETL(requestSimilitud.getEtl()));
+		//ponderaciones.add(this.iPonderacionETLService.obtenerPonderacionETL(requestSimilitud.getEtl()));
 
-		resultadoPonderado.setEstatus(HttpStatus.OK);
-		resultadoPonderado.setData(ponderaciones);
+		resultadoPonderadoBD.setEstatus(HttpStatus.OK);
+		resultadoPonderadoBD.setData(ponderaciones);
 
-		return resultadoPonderado;
+		return resultadoPonderadoBD;
 	}
 
 	@Override
@@ -47,6 +48,7 @@ public class PonderacionServiceImpl implements IPonderacionService {
 		
 		RespuestaDatosAlmacenados respuestaDatosAlmacenados = new RespuestaDatosAlmacenados();
 		respuestaDatosAlmacenados.setBaseDatos(iCalcularPonderacionBDService.obtenerValoresAmacenados());
+		respuestaDatosAlmacenados.setEtl(iPonderacionETLService.obtenerValoresAmacenados());
 		response.setEstatus(HttpStatus.OK);
 		response.setData(respuestaDatosAlmacenados);
 		return response;

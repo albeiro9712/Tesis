@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.unicauca.tesis.api.mappers.ResponseBDMapper;
 import com.unicauca.tesis.api.models.DTO.request.BaseDatos;
-import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderado;
+import com.unicauca.tesis.api.models.DTO.request.Costo;
+import com.unicauca.tesis.api.models.DTO.request.Documentacion;
+import com.unicauca.tesis.api.models.DTO.request.FuncionalidadesBD;
+import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderadoBD;
 import com.unicauca.tesis.api.models.entities.CaracteristicasSGBD;
 import com.unicauca.tesis.api.repositories.CaracteristicasBDRepository;
 
@@ -28,10 +31,10 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 	}
 
 	@Override
-	public List<ResultadoPonderado> obtenerPonderacionBD(BaseDatos baseDatos) {
+	public List<BaseDatos> obtenerPonderacionBD(BaseDatos baseDatos) {
 
 		List<CaracteristicasSGBD> herramientasBD = this.caracteristicasBDRepository.findAll();
-		List<ResultadoPonderado> resultadosBD = new ArrayList<>();
+		List<BaseDatos> resultadosBD = new ArrayList<>();
 
 		for (int i = 0; i < herramientasBD.size(); i++) {
 			resultadosBD.add(calcularPonderadoPorHerramienta(baseDatos, herramientasBD.get(i)));
@@ -40,10 +43,10 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 		return resultadosBD;
 	}
 
-	private ResultadoPonderado calcularPonderadoPorHerramienta(BaseDatos baseDatosEntrada,
+	private BaseDatos calcularPonderadoPorHerramienta(BaseDatos baseDatosEntrada,
 			CaracteristicasSGBD baseDatosAlmacenada) {
 
-		ResultadoPonderado resultadoPonderado = new ResultadoPonderado();
+		ResultadoPonderadoBD resultadoPonderadoBD = new ResultadoPonderadoBD();
 
 		// costo
 		double costoPonderado = this.iCommonsService.calcularPonderadoParaNumeros(baseDatosAlmacenada.getCosto(),
@@ -56,11 +59,11 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 		// caracteristicas tecnicas
 		double espacionEnDisco = this.iCommonsService.calcularPonderadoParaNumeros(
 				Double.valueOf(baseDatosAlmacenada.getEspacionEnDisco()),
-				Double.valueOf(baseDatosEntrada.getCaracteristicasTecnicas().getEspacionEnDisco()));
+				baseDatosEntrada.getCaracteristicasTecnicas().getEspacionEnDisco());
 
 		double EspacioEnMemoria = this.iCommonsService.calcularPonderadoParaNumeros(
 				Double.valueOf(baseDatosAlmacenada.getEspacioEnMemoria()),
-				Double.valueOf(baseDatosEntrada.getCaracteristicasTecnicas().getEspacioEnMemoria()));
+				baseDatosEntrada.getCaracteristicasTecnicas().getEspacioEnMemoria());
 
 		double multiplataforma = this.iCommonsService.calcularPonderadoParaTextos(
 				baseDatosAlmacenada.getMultiplataforma(),
@@ -92,11 +95,12 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 		double resulFinal = this.iCommonsService.calcularPonderadoFinal(costoResultado, docuResultado,
 				caracTecResultado, funcionalidadesResultado);
 
-		resultadoPonderado.setHerramienta(baseDatosAlmacenada.getHerramienta().getNombre() + " "
+		resultadoPonderadoBD.setHerramienta(baseDatosAlmacenada.getHerramienta().getNombre() + " "
 				+ baseDatosAlmacenada.getHerramienta().getEdicion());
-		resultadoPonderado.setPonderado(resulFinal);
+		resultadoPonderadoBD.setPonderado(resulFinal);
 
-		return resultadoPonderado;
+		return construirRespuestaonPonderados(costoPonderado, docuResultado, espacionEnDisco, EspacioEnMemoria,
+				multiplataforma, apiPonderado, metodosReplicacion, funcionesCifrado);
 
 	}
 
@@ -104,11 +108,28 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 	public List<BaseDatos> obtenerValoresAmacenados() {
 
 		List<CaracteristicasSGBD> herramientasBD = this.caracteristicasBDRepository.findAll();
-		System.out.println(herramientasBD);
 		List<BaseDatos> herramientasBdRetornar = herramientasBD.stream().map(x -> {
 			return ResponseBDMapper.INSTANCE.convertCaracteristicasSGBDEntityABaseDatos(x);
 		}).collect(Collectors.toList());
 		return herramientasBdRetornar;
+	}
+
+	private BaseDatos construirRespuestaonPonderados(double costoP, double docP, double espacionDisco,
+			double espacioMemoria, double multipla, double api, double replica, double cifrado) {
+
+		FuncionalidadesBD funcionalidadesBD = new FuncionalidadesBD();
+		funcionalidadesBD.setApisMetodosAcceso(String.valueOf(api));
+		funcionalidadesBD.setFuncionesCifrado(String.valueOf(cifrado));
+		funcionalidadesBD.setMetodosReplicacion(String.valueOf(replica));
+
+		BaseDatos baseDatos = new BaseDatos();
+		baseDatos.setCosto(this.iCommonsService.construirRespuestaonPonderadoCosto(costoP));
+		baseDatos.setDocumentacion(this.iCommonsService.construirRespuestaonPonderadoDocum(docP));
+		baseDatos.setCaracteristicasTecnicas(
+				this.iCommonsService.construirRespuestaonPonderadoCaracteTec(espacionDisco, espacioMemoria, multipla));
+		baseDatos.setFuncionalidadesBD(funcionalidadesBD);
+
+		return baseDatos;
 	}
 
 }

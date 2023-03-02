@@ -2,13 +2,18 @@ package com.unicauca.tesis.api.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.unicauca.tesis.api.mappers.ResponseBDMapper;
+import com.unicauca.tesis.api.mappers.ResponseETLMapper;
+import com.unicauca.tesis.api.models.DTO.request.BaseDatos;
 import com.unicauca.tesis.api.models.DTO.request.ETL;
-import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderado;
+import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderadoBD;
 import com.unicauca.tesis.api.models.entities.CaracteristicasETL;
+import com.unicauca.tesis.api.models.entities.CaracteristicasSGBD;
 import com.unicauca.tesis.api.repositories.CaracteristicasETLRepository;
 
 @Service
@@ -25,9 +30,9 @@ public class PonderacionETLServiceImpl implements IPonderacionETLService {
 	}
 
 	@Override
-	public List<ResultadoPonderado> obtenerPonderacionETL(ETL etl) {
+	public List<ResultadoPonderadoBD> obtenerPonderacionETL(ETL etl) {
 		List<CaracteristicasETL> herramientasETL = this.caracteristicasETLRepository.findAll();
-		List<ResultadoPonderado> resultadosETL = new ArrayList<>();
+		List<ResultadoPonderadoBD> resultadosETL = new ArrayList<>();
 
 		for (int i = 0; i < herramientasETL.size(); i++) {
 			resultadosETL.add(calcularPonderadoPorHerramienta(etl, herramientasETL.get(i)));
@@ -36,8 +41,8 @@ public class PonderacionETLServiceImpl implements IPonderacionETLService {
 		return resultadosETL;
 	}
 
-	private ResultadoPonderado calcularPonderadoPorHerramienta(ETL etlRequest, CaracteristicasETL etlAlmacenada) {
-		ResultadoPonderado resultadoPonderado = new ResultadoPonderado();
+	private ResultadoPonderadoBD calcularPonderadoPorHerramienta(ETL etlRequest, CaracteristicasETL etlAlmacenada) {
+		ResultadoPonderadoBD resultadoPonderadoBD = new ResultadoPonderadoBD();
 
 		// costo
 		double costo = this.iCommonsService.calcularPonderadoParaNumeros(etlAlmacenada.getCosto(),
@@ -122,11 +127,26 @@ public class PonderacionETLServiceImpl implements IPonderacionETLService {
 		double resulFinal = this.iCommonsService.calcularPonderadoFinal(costoResultado, docuResultado,
 				caracTecResultado, funcionalidadesResultado);
 
-		resultadoPonderado.setHerramienta(
+		resultadoPonderadoBD.setHerramienta(
 				etlAlmacenada.getHerramienta().getNombre() + " " + etlAlmacenada.getHerramienta().getEdicion());
-		resultadoPonderado.setPonderado(resulFinal);
+		resultadoPonderadoBD.setPonderado(resulFinal);
 
-		return resultadoPonderado;
+		return resultadoPonderadoBD;
+	}
+
+	@Override
+	public List<ETL> obtenerValoresAmacenados() {
+		List<CaracteristicasETL> herramientasETL= this.caracteristicasETLRepository.findAll();
+		List<ETL> herramientasETLRetornar = herramientasETL.stream().map(x -> {
+			return ResponseETLMapper.INSTANCE.convertCaracteristicasETLEntityAETL(x);
+		}).collect(Collectors.toList());
+		return herramientasETLRetornar;
+	}
+
+	@Override
+	public List<ETL> obtenerPonderadosPorHerramientaYCaracteristica(double... args) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

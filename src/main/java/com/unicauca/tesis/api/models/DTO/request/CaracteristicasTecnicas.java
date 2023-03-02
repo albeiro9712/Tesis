@@ -2,19 +2,19 @@ package com.unicauca.tesis.api.models.DTO.request;
 
 public class CaracteristicasTecnicas {
 
-	private Integer espacionEnDisco;
+	private Double espacionEnDisco;
 
-	private Integer espacioEnMemoria;
+	private Double espacioEnMemoria;
 
 	private String multiplataforma;
 
 	private Double porcentaje;
 
-	public Integer getEspacionEnDisco() {
+	public Double getEspacionEnDisco() {
 		return espacionEnDisco;
 	}
 
-	public void setEspacionEnDisco(Integer espacionEnDisco) {
+	public void setEspacionEnDisco(Double espacionEnDisco) {
 		this.espacionEnDisco = espacionEnDisco;
 	}
 
@@ -30,11 +30,11 @@ public class CaracteristicasTecnicas {
 		return porcentaje;
 	}
 
-	public Integer getEspacioEnMemoria() {
+	public Double getEspacioEnMemoria() {
 		return espacioEnMemoria;
 	}
 
-	public void setEspacioEnMemoria(Integer espacioEnMemoria) {
+	public void setEspacioEnMemoria(Double espacioEnMemoria) {
 		this.espacioEnMemoria = espacioEnMemoria;
 	}
 

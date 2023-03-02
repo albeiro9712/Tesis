@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
+import com.unicauca.tesis.api.models.DTO.request.CaracteristicasTecnicas;
+import com.unicauca.tesis.api.models.DTO.request.Costo;
+import com.unicauca.tesis.api.models.DTO.request.Documentacion;
+
 @Service
 public class CommonsServiceImpl implements ICommonsService {
 
@@ -60,6 +64,30 @@ public class CommonsServiceImpl implements ICommonsService {
 	@Override
 	public Double calcularFuncionalidadesFinalConPorcentaje(double porcentaje, double... args) {
 		return ((Arrays.stream(args).sum()) / args.length) * porcentaje;
+	}
+
+	@Override
+	public Costo construirRespuestaonPonderadoCosto(double costoP) {
+		Costo costo = new Costo();
+		costo.setValor(costoP);
+		return costo;
+	}
+
+	@Override
+	public Documentacion construirRespuestaonPonderadoDocum(double documP) {
+		Documentacion documentacion = new Documentacion();
+		documentacion.setValor(String.valueOf(documP));
+		return documentacion;
+	}
+
+	@Override
+	public CaracteristicasTecnicas construirRespuestaonPonderadoCaracteTec(double espacionDisco, double espacioMemoria,
+			double multipla) {
+		CaracteristicasTecnicas caracteristicasTecnicas = new CaracteristicasTecnicas();
+		caracteristicasTecnicas.setEspacioEnMemoria(espacioMemoria);
+		caracteristicasTecnicas.setEspacionEnDisco(espacionDisco);
+		caracteristicasTecnicas.setMultiplataforma(String.valueOf(multipla));
+		return caracteristicasTecnicas;
 	}
 
 }
