@@ -3,7 +3,7 @@ package com.unicauca.tesis.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication()
 public class TesisApplication {
 
 	public static void main(String[] args) {

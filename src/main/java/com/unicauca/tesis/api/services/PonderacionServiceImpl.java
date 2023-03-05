@@ -12,6 +12,7 @@ import com.unicauca.tesis.api.models.DTO.request.RequestSimilitud;
 import com.unicauca.tesis.api.models.DTO.response.Response;
 import com.unicauca.tesis.api.models.DTO.response.RespuestaDatosAlmacenados;
 import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderadoBD;
+import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderados;
 
 @Service
 public class PonderacionServiceImpl implements IPonderacionService {
@@ -27,25 +28,25 @@ public class PonderacionServiceImpl implements IPonderacionService {
 	}
 
 	@Override
-	public Response<List<List<BaseDatos>>> obtenerPonderados(RequestSimilitud requestSimilitud) {
+	public Response<ResultadoPonderados> obtenerPonderados(RequestSimilitud requestSimilitud) {
 
-		Response<List<List<BaseDatos>>> resultadoPonderadoBD = new Response<>();
-		List<List<BaseDatos>> ponderaciones = new ArrayList<>();
+		Response<ResultadoPonderados> resultadoPonderadoBD = new Response<>();
+		ResultadoPonderados resultadoPonderados = new ResultadoPonderados();
 
-		ponderaciones.add(this.iCalcularPonderacionBDService.obtenerPonderacionBD(requestSimilitud.getBaseDatos()));
-		//ponderaciones.add(this.iPonderacionETLService.obtenerPonderacionETL(requestSimilitud.getEtl()));
+		resultadoPonderados
+				.setBaseDatos(this.iCalcularPonderacionBDService.obtenerPonderacionBD(requestSimilitud.getBaseDatos()));
 
 		resultadoPonderadoBD.setEstatus(HttpStatus.OK);
-		resultadoPonderadoBD.setData(ponderaciones);
+		resultadoPonderadoBD.setData(resultadoPonderados);
 
 		return resultadoPonderadoBD;
 	}
 
 	@Override
 	public Response<RespuestaDatosAlmacenados> obtenerDatosAlmacenados() {
-		
+
 		Response<RespuestaDatosAlmacenados> response = new Response<>();
-		
+
 		RespuestaDatosAlmacenados respuestaDatosAlmacenados = new RespuestaDatosAlmacenados();
 		respuestaDatosAlmacenados.setBaseDatos(iCalcularPonderacionBDService.obtenerValoresAmacenados());
 		respuestaDatosAlmacenados.setEtl(iPonderacionETLService.obtenerValoresAmacenados());

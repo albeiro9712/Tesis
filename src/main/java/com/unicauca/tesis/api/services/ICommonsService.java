@@ -27,5 +27,5 @@ public interface ICommonsService {
 	public Documentacion construirRespuestaonPonderadoDocum(double documP);
 
 	public CaracteristicasTecnicas construirRespuestaonPonderadoCaracteTec(double espacionDisco, double espacioMemoria,
-			double multipla);
+			double multipla, double pondeCarcatTec);
 }

@@ -71,23 +71,24 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 
 		// funcionalidades
 		double apiPonderado = this.iCommonsService.calcularPonderadoParaTextos(
-				baseDatosAlmacenada.getMetodosReplicacion(),
-				baseDatosEntrada.getFuncionalidadesBD().getMetodosReplicacion());
+				baseDatosAlmacenada.getApisMetodosAcceso(),
+				baseDatosEntrada.getFuncionalidadesBD().getApisMetodosAcceso());
 
 		double metodosReplicacion = this.iCommonsService.calcularPonderadoParaTextos(
-				baseDatosAlmacenada.getFuncionesCifrado(),
-				baseDatosEntrada.getFuncionalidadesBD().getFuncionesCifrado());
-
-		double funcionesCifrado = this.iCommonsService.calcularPonderadoParaTextos(
 				baseDatosAlmacenada.getMetodosReplicacion(),
 				baseDatosEntrada.getFuncionalidadesBD().getMetodosReplicacion());
+
+		double funcionesCifrado = this.iCommonsService.calcularPonderadoParaTextos(
+				baseDatosAlmacenada.getFuncionesCifrado(),
+				baseDatosEntrada.getFuncionalidadesBD().getFuncionesCifrado());
 
 		double costoResultado = this.iCommonsService.calcularCostoFinalConPorcentaje(costoPonderado,
 				baseDatosEntrada.getCosto().getPorcentaje());
 		double docuResultado = this.iCommonsService.calcularDocumentacionFinalConPorcentaje(documentacionPonderado,
 				baseDatosEntrada.getDocumentacion().getPorcentaje());
-		double caracTecResultado = this.iCommonsService.calcularCractTectFinalConPorcentaje(espacionEnDisco,
-				EspacioEnMemoria, multiplataforma, baseDatosEntrada.getCaracteristicasTecnicas().getPorcentaje());
+		double caracTecResultado = this.iCommonsService.calcularCractTectFinalConPorcentaje(
+				baseDatosEntrada.getCaracteristicasTecnicas().getPorcentaje(), espacionEnDisco, EspacioEnMemoria,
+				multiplataforma);
 		double funcionalidadesResultado = this.iCommonsService.calcularFuncionalidadesFinalConPorcentaje(
 				baseDatosEntrada.getFuncionalidadesBD().getPorcentaje(), apiPonderado, metodosReplicacion,
 				funcionesCifrado);
@@ -95,12 +96,12 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 		double resulFinal = this.iCommonsService.calcularPonderadoFinal(costoResultado, docuResultado,
 				caracTecResultado, funcionalidadesResultado);
 
-		resultadoPonderadoBD.setHerramienta(baseDatosAlmacenada.getHerramienta().getNombre() + " "
-				+ baseDatosAlmacenada.getHerramienta().getEdicion());
-		resultadoPonderadoBD.setPonderado(resulFinal);
+		String nombre = baseDatosAlmacenada.getHerramienta().getNombre() + " "
+				+ baseDatosAlmacenada.getHerramienta().getEdicion();
 
-		return construirRespuestaonPonderados(costoPonderado, docuResultado, espacionEnDisco, EspacioEnMemoria,
-				multiplataforma, apiPonderado, metodosReplicacion, funcionesCifrado);
+		return construirRespuestaonPonderados(costoResultado, docuResultado, espacionEnDisco, EspacioEnMemoria,
+				multiplataforma, apiPonderado, metodosReplicacion, funcionesCifrado, funcionalidadesResultado,
+				caracTecResultado, resulFinal, nombre);
 
 	}
 
@@ -115,19 +116,23 @@ public class PonderacionBDServiceImpl implements IPonderacionBDService {
 	}
 
 	private BaseDatos construirRespuestaonPonderados(double costoP, double docP, double espacionDisco,
-			double espacioMemoria, double multipla, double api, double replica, double cifrado) {
+			double espacioMemoria, double multipla, double api, double replica, double cifrado,
+			double funcionalidadesResultado, double caracTecResultado, double resulFinal, String nombre) {
 
 		FuncionalidadesBD funcionalidadesBD = new FuncionalidadesBD();
 		funcionalidadesBD.setApisMetodosAcceso(String.valueOf(api));
 		funcionalidadesBD.setFuncionesCifrado(String.valueOf(cifrado));
 		funcionalidadesBD.setMetodosReplicacion(String.valueOf(replica));
+		funcionalidadesBD.setFuncionalidadesDBPonderado(funcionalidadesResultado);
 
 		BaseDatos baseDatos = new BaseDatos();
 		baseDatos.setCosto(this.iCommonsService.construirRespuestaonPonderadoCosto(costoP));
 		baseDatos.setDocumentacion(this.iCommonsService.construirRespuestaonPonderadoDocum(docP));
-		baseDatos.setCaracteristicasTecnicas(
-				this.iCommonsService.construirRespuestaonPonderadoCaracteTec(espacionDisco, espacioMemoria, multipla));
+		baseDatos.setCaracteristicasTecnicas(this.iCommonsService.construirRespuestaonPonderadoCaracteTec(espacionDisco,
+				espacioMemoria, multipla, caracTecResultado));
 		baseDatos.setFuncionalidadesBD(funcionalidadesBD);
+		baseDatos.setBaseDatosPonderado(resulFinal);
+		baseDatos.setNombre(nombre);
 
 		return baseDatos;
 	}

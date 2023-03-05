@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import com.unicauca.tesis.api.models.DTO.request.BaseDatos;
 import com.unicauca.tesis.api.models.entities.CaracteristicasSGBD;
 
-@Mapper()
+@Mapper(uses = MapperTranslator.class)
 public interface ResponseBDMapper {
 
 	ResponseBDMapper INSTANCE = Mappers.getMapper(ResponseBDMapper.class);
@@ -19,6 +19,6 @@ public interface ResponseBDMapper {
 	@Mapping(source = "caracteristicasSGBD.funcionesCifrado", target = "funcionalidadesBD.funcionesCifrado")
 	@Mapping(source = "caracteristicasSGBD", target = "caracteristicasTecnicas")
 	@Mapping(source = "caracteristicasSGBD", target = "funcionalidadesBD")
-	@Mapping(source = "caracteristicasSGBD.herramienta.nombre", target = "nombre")
+	@Mapping(source = ".", target = "nombre", qualifiedByName = "concatenarNombre")
 	BaseDatos convertCaracteristicasSGBDEntityABaseDatos(CaracteristicasSGBD caracteristicasSGBD );
 }

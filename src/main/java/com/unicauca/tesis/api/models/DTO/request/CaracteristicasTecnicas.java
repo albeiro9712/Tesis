@@ -10,6 +10,8 @@ public class CaracteristicasTecnicas {
 
 	private Double porcentaje;
 
+	private Double caracteristicasTecnicasPonderado;
+
 	public Double getEspacionEnDisco() {
 		return espacionEnDisco;
 	}
@@ -36,6 +38,20 @@ public class CaracteristicasTecnicas {
 
 	public void setEspacioEnMemoria(Double espacioEnMemoria) {
 		this.espacioEnMemoria = espacioEnMemoria;
+	}
+
+
+
+	public Double getCaracteristicasTecnicasPonderado() {
+		return caracteristicasTecnicasPonderado;
+	}
+
+	public void setCaracteristicasTecnicasPonderado(Double caracteristicasTecnicasPonderado) {
+		this.caracteristicasTecnicasPonderado = caracteristicasTecnicasPonderado;
+	}
+
+	public void setPorcentaje(Double porcentaje) {
+		this.porcentaje = porcentaje;
 	}
 
 }

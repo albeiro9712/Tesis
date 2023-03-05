@@ -12,6 +12,8 @@ public class FuncionalidadesBD {
 
 	private Double porcentaje;
 
+	private Double funcionalidadesDBPonderado;
+
 	public String getApisMetodosAcceso() {
 		return apisMetodosAcceso;
 	}
@@ -51,7 +53,13 @@ public class FuncionalidadesBD {
 	public void setCapacidaMaximaAlmace(Double capacidaMaximaAlmace) {
 		this.capacidaMaximaAlmace = capacidaMaximaAlmace;
 	}
-	
-	
+
+	public Double getFuncionalidadesDBPonderado() {
+		return funcionalidadesDBPonderado;
+	}
+
+	public void setFuncionalidadesDBPonderado(Double funcionalidadesDBPonderado) {
+		this.funcionalidadesDBPonderado = funcionalidadesDBPonderado;
+	}
 
 }

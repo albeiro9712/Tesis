@@ -14,11 +14,13 @@ public class MedidaSimilitudServiceImpl implements IMedidaSimilitudService {
 	@Override
 	public Double calcularPonderadoParaTextos(String textoAlmacenado, String textoEntrada) {
 		
+		String datoAlmacenado = this.realizarPreProcesamiento(textoAlmacenado, textoEntrada);
+		
 		CosineSimilarity documentsSimilarity = new CosineSimilarity();
 
 		Map<CharSequence, Integer> vectorA = Arrays.stream(textoEntrada.split(","))
 				.collect(Collectors.toMap(character -> character, character -> 1, Integer::sum));
-		Map<CharSequence, Integer> vectorB = Arrays.stream(textoAlmacenado.split(","))
+		Map<CharSequence, Integer> vectorB = Arrays.stream(datoAlmacenado.split(","))
 				.collect(Collectors.toMap(character -> character, character -> 1, Integer::sum));
 
 		Double docABCosSimilarity = documentsSimilarity.cosineSimilarity(vectorA, vectorB);
@@ -26,7 +28,7 @@ public class MedidaSimilitudServiceImpl implements IMedidaSimilitudService {
 		return docABCosSimilarity;
 	}
 
-	public String realizarPreProcesamiento(String datoAlmacenado, String datoEntrada) {
+	private String realizarPreProcesamiento(String datoAlmacenado, String datoEntrada) {
 
 		String[] arregloEntrada = datoEntrada.split(",");
 		String[] arregloAlmacenado = datoAlmacenado.split(",");
