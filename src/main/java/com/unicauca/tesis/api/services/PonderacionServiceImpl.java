@@ -1,17 +1,12 @@
 package com.unicauca.tesis.api.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.unicauca.tesis.api.models.DTO.request.BaseDatos;
 import com.unicauca.tesis.api.models.DTO.request.RequestSimilitud;
 import com.unicauca.tesis.api.models.DTO.response.Response;
 import com.unicauca.tesis.api.models.DTO.response.RespuestaDatosAlmacenados;
-import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderadoBD;
 import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderados;
 
 @Service
@@ -35,6 +30,7 @@ public class PonderacionServiceImpl implements IPonderacionService {
 
 		resultadoPonderados
 				.setBaseDatos(this.iCalcularPonderacionBDService.obtenerPonderacionBD(requestSimilitud.getBaseDatos()));
+		resultadoPonderados.setEtl(this.iPonderacionETLService.obtenerPonderacionETL(requestSimilitud.getEtl()));
 
 		resultadoPonderadoBD.setEstatus(HttpStatus.OK);
 		resultadoPonderadoBD.setData(resultadoPonderados);

@@ -1,7 +1,6 @@
 package com.unicauca.tesis.api.services;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.unicauca.tesis.api.mappers.ResponseBDMapper;
 import com.unicauca.tesis.api.models.DTO.request.BaseDatos;
-import com.unicauca.tesis.api.models.DTO.request.Costo;
-import com.unicauca.tesis.api.models.DTO.request.Documentacion;
 import com.unicauca.tesis.api.models.DTO.request.FuncionalidadesBD;
 import com.unicauca.tesis.api.models.DTO.response.ResultadoPonderadoBD;
 import com.unicauca.tesis.api.models.entities.CaracteristicasSGBD;

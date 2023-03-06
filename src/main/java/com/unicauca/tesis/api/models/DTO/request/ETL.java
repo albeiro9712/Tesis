@@ -2,6 +2,9 @@ package com.unicauca.tesis.api.models.DTO.request;
 
 public class ETL {
 
+
+	private String nombre;
+	private Double etlPonderado;
 	private Costo costoETL;
 	private Documentacion documentacionETL;
 	private CaracteristicasTecnicas caracTecETL;
@@ -39,4 +42,21 @@ public class ETL {
 		this.funcionalidadesETL = funcionalidadesETL;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public Double getEtlPonderado() {
+		return etlPonderado;
+	}
+
+	public void setEtlPonderado(Double etlPonderado) {
+		this.etlPonderado = etlPonderado;
+	}
+
+	
 }

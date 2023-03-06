@@ -17,14 +17,16 @@ public class CommonsServiceImpl implements ICommonsService {
 		this.iMedidaSimilitudService = iMedidaSimilitudService;
 	}
 
-	//agregar condicion de valor ingresado igual al almacenado
+	// agregar condicion de valor ingresado igual al almacenado
 	@Override
 	public Double calcularPonderadoParaNumeros(Double numeroAlmacenado, Double numeroEntrada) {
 		double resultado = 0.0;
-		if (numeroEntrada <= numeroAlmacenado) {
-			resultado = (numeroAlmacenado - numeroEntrada) / numeroAlmacenado;
-		} else if (numeroAlmacenado == 0.0){
+		if (numeroAlmacenado == 0) {
 			resultado = 1.0;
+			return resultado;
+		} else if (numeroEntrada > numeroAlmacenado) {
+
+			resultado = ((numeroAlmacenado - numeroEntrada) / numeroAlmacenado) * -1;
 		}
 		return resultado;
 	}
